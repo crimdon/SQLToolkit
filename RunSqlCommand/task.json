@@ -1,0 +1,62 @@
+{
+    "id": "fda5a2a7-b40f-4f19-a145-f76b8ae00dca",
+    "name": "RunSqlCommand",
+    "friendlyName": "Run SQL Command",
+    "description": "Allows you to run a SQL Command",
+    "author": "Andrew Lackenby",
+    "category": "Utility",
+    "version": {
+        "Major": "0",
+        "Minor": "0",
+        "Patch": "1"
+    },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "minimumAgentVersion": "1.83.0",
+    "inputs": [
+        {
+            "name": "serverName",
+            "type": "string",
+            "label": "Server Name",
+            "required": true
+        },
+        {
+            "name": "databaseName",
+            "type": "string",
+            "label": "Database Name",
+            "required": true
+        },
+        {
+            "name": "sqlCommand",
+            "type": "multiLine",
+            "label": "SQL Command",
+            "required": true
+        },
+        {
+            "name": "userName",
+            "type": "string",
+            "label": "SQL SQL Server Login ID",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+        },
+                {
+            "name": "userPassword",
+            "type": "string",
+            "label": "SQL Server Authentication password",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+        }
+    ],
+    "instanceNameFormat": "Run Sql Command on $(databaseName)",
+    "execution": {
+        "PowerShell3": {
+            "target": "RunSqlCommand.ps1"}
+    }
+}

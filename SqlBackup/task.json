@@ -1,0 +1,87 @@
+{
+    "id": "a8b696ba-d31e-402f-9815-69a7de733e12",
+    "name": "SqlBackup",
+    "friendlyName": "Backup SQL Database",
+    "description": "Backup a SQL Server database",
+    "author": "Andrew Lackenby",
+    "category": "Utility",
+    "version": {
+        "Major": "1",
+        "Minor": "6",
+        "Patch": "0"
+    },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "minimumAgentVersion": "1.83.0",
+    "inputs": [
+                {
+            "name": "backupType",
+            "type": "pickList",
+            "label": "Backup Type",
+            "defaultValue": "Full",
+            "required": true,
+            "options": {
+            "Full": "Full backup",
+            "Log": "Transaction Log backup",
+            "Differential": "Differential backup"
+            },
+            "helpMarkDown": "Specify the backup type you want to perform."
+        },
+        {
+            "name": "serverName",
+            "type": "string",
+            "label": "Server Name",
+            "required": true,
+            "helpMarkDown": "Enter the server name as ServerName or ServerName\\Instance"
+        },
+         {
+            "name": "databaseName",
+            "type": "string",
+            "label": "Database Name",
+            "required": true,
+            "helpMarkDown": "Specify the name of the database you want to backup. If database name includes spaces, wrap it in square brackets []"
+        },
+        {
+            "name": "backupFile",
+            "type": "string",
+            "label": "Backup file name",
+            "required": true,
+            "helpMarkDown": "Specify the file name (including full path) of the backup file."
+        },
+        {
+            "name": "withInit",
+            "type": "boolean",
+            "label": "Overwrite backup file",
+            "defaultValue":"true",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Controls whether the backup operation appends to or overwrites the existing backup sets on the backup media"
+        },
+        {
+            "name": "userName",
+            "type": "string",
+            "label": "SQL SQL Server Login ID",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+        },
+                {
+            "name": "userPassword",
+            "type": "string",
+            "label": "SQL Server Authentication password",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+        }
+    ],
+    "instanceNameFormat": "Run Sql Backup of $(databaseName)",
+    "execution": {
+        "PowerShell3": {
+            "target": "SqlBackup.ps1"}
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "id": "6cf13cc2-b9c7-4164-af9e-1d5a0db47a6b",
+    "name": "RunSingleSqlScript",
+    "friendlyName": "Run SQL Stored Procedure",
+    "description": "Allows you to run a SQL Stored Procedure",
+    "author": "Andrew Lackenby",
+    "category": "Utility",
+    "version": {
+        "Major": "0",
+        "Minor": "0",
+        "Patch": "2"
+    },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "minimumAgentVersion": "1.83.0",
+    "inputs": [
+        {
+            "name": "serverName",
+            "type": "string",
+            "label": "Server Name",
+            "required": true
+        },
+        {
+            "name": "databaseName",
+            "type": "string",
+            "label": "Database Name",
+            "required": true
+        },
+                {
+            "name": "sprocName",
+            "type": "string",
+            "label": "Stored Procedure",
+            "required": true
+        },
+                {
+            "name": "sprocParameters",
+            "type": "string",
+            "label": "Parameters",
+            "required": false
+        },
+        {
+            "name": "userName",
+            "type": "string",
+            "label": "SQL SQL Server Login ID",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+        },
+                {
+            "name": "userPassword",
+            "type": "string",
+            "label": "SQL Server Authentication password",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+        }
+    ],
+    "instanceNameFormat": "Run Stored Procedure $(sprocName) on $(databaseName)",
+    "execution": {
+        "PowerShell3": {
+            "target": "RunStoredProcedure.ps1"}
+    }
+}

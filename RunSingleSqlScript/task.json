@@ -1,0 +1,62 @@
+{
+    "id": "75e0df60-f8c3-44b5-a48f-83f4ff71ae4b",
+    "name": "RunSingleSqlScript",
+    "friendlyName": "Run Single Sql Scripts",
+    "description": "Allows you to run SQL Scripts",
+    "author": "Andrew Lackenby",
+    "category": "Utility",
+    "version": {
+        "Major": "1",
+        "Minor": "6",
+        "Patch": "0"
+    },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "minimumAgentVersion": "1.83.0",
+    "inputs": [
+       {
+            "name": "sqlScript",
+            "type": "filePath",
+            "label": "Specify SQL Script to run",
+            "required": true
+        },
+        {
+            "name": "serverName",
+            "type": "string",
+            "label": "Server Name",
+            "required": true
+        },
+        {
+            "name": "databaseName",
+            "type": "string",
+            "label": "Database Name",
+            "required": true
+        },
+        {
+            "name": "userName",
+            "type": "string",
+            "label": "SQL SQL Server Login ID",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+        },
+                {
+            "name": "userPassword",
+            "type": "string",
+            "label": "SQL Server Authentication password",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+        }
+    ],
+    "instanceNameFormat": "Run Sql Scripts on $(databaseName)",
+    "execution": {
+        "PowerShell3": {
+            "target": "RunSingleSqlScript.ps1"}
+    }
+}

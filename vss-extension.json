@@ -1,0 +1,98 @@
+{
+    "manifestVersion": 1,
+    "id": "sql-toolkit",
+    "name": "SQL Toolkit",
+    "version": "1.7.1",
+    "publisher": "andrewlackenby",
+    "public": true,
+	"categories": [
+        "Build and release"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "SQL Toolkit for on premises TFS",
+
+    "icons": {
+        "default": "icon.jpg"        
+    },
+    "content": {
+        "details": {
+            "path": "readme.md"
+    },
+    "license": {
+            "path": "LICENSE.txt"
+    }
+    },
+    "files": [
+        {
+            "path": "RunSingleSqlScript"
+        },
+        {
+            "path": "RunSqlScripts"
+        },
+        {
+            "path": "SqlBackup"
+        },
+        {
+            "path": "RunStoredProcedure"
+        },
+        {
+            "path": "RunSqlCommand"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "runsinglesqlscript",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "RunSingleSqlScript"
+            }
+        },
+        {
+            "id": "runsqlscripts",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "RunSqlScripts"
+            }
+        },
+         {
+            "id": "sqlbackup",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "SqlBackup"
+            }
+        },
+        {
+            "id": "runstoredprocedure",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "RunStoredProcedure"
+            }
+        },
+           {
+            "id": "runsqlcommand",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "RunSqlCommand"
+            }
+        }
+    ]
+}
