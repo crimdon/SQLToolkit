@@ -23,7 +23,8 @@
             "name": "serverName",
             "type": "string",
             "label": "Server Name",
-            "required": true
+            "required": true,
+            "helpMarkDown": "Instance name of the SQL Server"
         },
         {
             "name": "databaseName",
@@ -43,7 +44,7 @@
             "label": "SQL SQL Server Login ID",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
         },
                 {
             "name": "userPassword",
@@ -51,7 +52,7 @@
             "label": "SQL Server Authentication password",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
         }
     ],
     "instanceNameFormat": "Run Sql Command on $(databaseName)",
