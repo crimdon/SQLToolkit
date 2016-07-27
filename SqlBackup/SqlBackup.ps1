@@ -14,6 +14,7 @@ Try
 		[string]$withInit = Get-VstsInput -Name withInit
 		[string]$userName = Get-VstsInput -Name userName
 		[string]$userPassword = Get-VstsInput -Name userPassword
+        [string]$userPassword = Get-VstsInput -Name queryTimeout
 		
 		
 		#Specify the Action property to generate a FULL backup
@@ -50,12 +51,12 @@ Try
 		if([string]::IsNullOrEmpty($userName))
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -QueryTimeout $queryTimeout
 		}
 		else
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
 		}
 		
 		Write-Host "Finished"

@@ -8,7 +8,7 @@
     "version": {
         "Major": "1",
         "Minor": "6",
-        "Patch": "0"
+        "Patch": "2"
     },
     "groups": [
         {
@@ -44,7 +44,7 @@
             "type": "string",
             "label": "Database Name",
             "required": true,
-            "helpMarkDown": "Specify the name of the database you want to backup. If database name includes spaces, wrap it in square brackets []"
+            "helpMarkDown": "Specify the name of the database you want to backup. If database name includes spaces, enclose it in square brackets []"
         },
         {
             "name": "backupFile",
@@ -68,16 +68,25 @@
             "label": "SQL SQL Server Login ID",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent servce runs under"
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
         },
-                {
+        {
             "name": "userPassword",
             "type": "string",
             "label": "SQL Server Authentication password",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Password for SQL Authenication. You should use a secret veriable here."
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        },
+		{
+            "name": "queryTimeout",
+            "type": "int",
+            "label": "Query timeout in seconds",
+			"defaultValue": "30",
+            "required": true,
+            "groupName": "advanced"
         }
+		
     ],
     "instanceNameFormat": "Run Sql Backup of $(databaseName)",
     "execution": {
