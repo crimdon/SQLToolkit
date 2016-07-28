@@ -8,7 +8,7 @@
     "version": {
         "Major": "0",
         "Minor": "0",
-        "Patch": "1"
+        "Patch": "2"
     },
     "groups": [
         {
@@ -53,6 +53,14 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        },
+        {
+            "name": "queryTimeout",
+            "type": "string",
+            "label": "Query Timeout",
+            "required": true,
+            "defaultValue": "30",
+            "groupName": "advanced"
         }
     ],
     "instanceNameFormat": "Run Sql Command on $(databaseName)",

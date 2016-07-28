@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sql-toolkit",
     "name": "SQL Toolkit",
-    "version": "1.7.2",
+    "version": "1.7.5",
     "publisher": "andrewlackenby",
     "public": true,
 	"categories": [
@@ -14,6 +14,8 @@
         }
     ],    
     "description": "SQL Toolkit for on premises TFS",
+
+    "learn": "https://github.com/crimdon/SQLToolkit",
 
     "icons": {
         "default": "icon.jpg"        

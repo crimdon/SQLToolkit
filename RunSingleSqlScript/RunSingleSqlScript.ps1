@@ -12,17 +12,18 @@ Try
 	[string]$databaseName = Get-VstsInput -Name databaseName
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
+	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
 	Write-Host "Running Script " $sqlScript " on Database " $databaseName
 		
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -QueryTimeout $queryTimeout
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
 		}
 
 	Write-Host "Finished"
