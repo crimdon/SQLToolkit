@@ -13,6 +13,7 @@ Try
 	[string]$sprocParameters = Get-VstsInput -Name sprocParameters
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
+	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
 
 	Write-Host "Running Stored Procedure " $sprocName " on Database " $databaseName
@@ -24,11 +25,11 @@ Try
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -QueryTimeout $queryTimeout
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -Username $userName -Password $userPassword
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
 		}
 
 	Write-Host "Finished"

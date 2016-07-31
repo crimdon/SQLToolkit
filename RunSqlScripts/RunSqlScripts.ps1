@@ -12,6 +12,7 @@ Try
 	[string]$databaseName = Get-VstsInput -Name databaseName;
 	[string]$userName = Get-VstsInput -Name userName;
 	[string]$userPassword = Get-VstsInput -Name userPassword;
+	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
 
 	Write-Host "Running all scripts in $pathToScripts";
 
@@ -26,7 +27,7 @@ Try
 		}
 		else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -Username $userName -Password $userPassword;
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -Username $userName -Password $userPassword -QueryTimeout $queryTimeout;
 		}
 	}
 
