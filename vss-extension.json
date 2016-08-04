@@ -2,20 +2,23 @@
     "manifestVersion": 1,
     "id": "sql-toolkit",
     "name": "SQL Toolkit",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "publisher": "andrewlackenby",
     "public": true,
 	"categories": [
         "Build and release"
     ],
+    "links": {
+        "support": {
+            "uri": "https://github.com/crimdon/SQLToolkit/issues"
+        }
+    },
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
     "description": "SQL Toolkit for on premises TFS",
-
-    "learn": "https://github.com/crimdon/SQLToolkit",
 
     "icons": {
         "default": "icon.jpg"        

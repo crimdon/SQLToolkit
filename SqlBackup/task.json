@@ -65,7 +65,7 @@
         {
             "name": "userName",
             "type": "string",
-            "label": "SQL SQL Server Login ID",
+            "label": "SQL Server Login",
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
