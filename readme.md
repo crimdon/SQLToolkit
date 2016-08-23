@@ -22,6 +22,14 @@ This is a set of build and deployment tasks to support SQL Server.
 - RunSingleSqlScript
 -- This task will run a specified SQL script against your database.
 
+
+## Setup
+
+In order to run this extension, the SQL Powershell modules must be installed on the server running
+the build agent.
+
+[Import the SQLPS Module](https://msdn.microsoft.com/en-GB/library/hh231286.aspx)
+
 ## Website:
 
 [SQL Toolkit](https://github.com/crimdon/SQLToolkit/)
