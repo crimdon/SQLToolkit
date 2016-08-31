@@ -15,7 +15,12 @@ Try
 		[string]$userName = Get-VstsInput -Name userName
 		[string]$userPassword = Get-VstsInput -Name userPassword
         [string]$userPassword = Get-VstsInput -Name queryTimeout
-		
+
+		if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
+		{
+			Add-PSSnapin SqlServerCmdletSnapin100
+			Add-PSSnapin SqlServerProviderSnapin100
+		}
 		
 		#Specify the Action property to generate a FULL backup
 		switch($backupType.ToLower())

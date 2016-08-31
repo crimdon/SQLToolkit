@@ -14,6 +14,12 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword;
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
 
+	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
+	{
+		Add-PSSnapin SqlServerCmdletSnapin100
+        Add-PSSnapin SqlServerProviderSnapin100
+	}
+
 	Write-Host "Running all scripts in $pathToScripts";
 
 	foreach ($f in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
