@@ -14,7 +14,7 @@ Try
 		[string]$withInit = Get-VstsInput -Name withInit
 		[string]$userName = Get-VstsInput -Name userName
 		[string]$userPassword = Get-VstsInput -Name userPassword
-        [string]$userPassword = Get-VstsInput -Name queryTimeout
+        [string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
 		if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
 		{
