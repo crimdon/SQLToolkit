@@ -42,8 +42,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL scripts";
-	Write-Error $_.Exception.GetType().FullName;
-	Write-Error $_.Exception.Message;
+	Write-Error "Error running SQL script: $_"
 }
 

@@ -37,8 +37,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL script"
-	Write-Debug $_.Exception.GetType().FullName
-	Write-Error $_.Exception.Message
+	Write-Error "Error running SQL script: $_"
 }
 

@@ -69,9 +69,7 @@ Try
 	
 Catch
 	{
-		Write-Error "Error running SQL backup";
-		Write-Error $_.Exception.GetType().FullName;
-		Write-Error $_.Exception.Message;
+		Write-Error "Error running SQL backup: $_"
 	}
 
 
