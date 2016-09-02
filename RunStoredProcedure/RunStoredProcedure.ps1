@@ -30,11 +30,11 @@ Try
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -QueryTimeout $queryTimeout -OutputSqlErrors $true
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true
 		}
 
 	Write-Host "Finished"

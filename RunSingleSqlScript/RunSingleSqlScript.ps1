@@ -25,11 +25,11 @@ Try
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -QueryTimeout $queryTimeout -OutputSqlErrors $true
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true
 		}
 
 	Write-Host "Finished"
