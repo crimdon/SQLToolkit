@@ -26,11 +26,11 @@ Try
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -QueryTimeout $queryTimeout -OutputSqlErrors $true
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
 		}
 
 	Write-Host "Finished"
@@ -38,6 +38,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL script: $_"
+	Write-Host "Error running SQL command: $_" -ForegroundColor Red
 }
 
