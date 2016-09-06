@@ -56,12 +56,12 @@ Try
 		if([string]::IsNullOrEmpty($userName))
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
 		}
 		else
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
 		}
 		
 		Write-Host "Finished"
@@ -69,7 +69,7 @@ Try
 	
 Catch
 	{
-		Write-Error "Error running SQL backup: $_"
+		Write-Host "Error running SQL backup: $_" -ForegroundColor Red
 	}
 
 
