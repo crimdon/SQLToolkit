@@ -1,0 +1,63 @@
+{
+    "id": "3E7191F2-D225-4AFF-A173-38ECA9D29B36",
+    "name": "RunDACPAC",
+    "friendlyName": "Run a DACPAC file",
+    "description": "Allows you to run DACPAC packages",
+    "author": "Andrew Lackenby",
+    "category": "Utility",
+    "version": {
+        "Major": "1",
+        "Minor": "0",
+        "Patch": "0"
+    },
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "minimumAgentVersion": "1.83.0",
+    "inputs": [
+       {
+            "name": "packagePath",
+            "type": "filePath",
+            "label": "Specify a DACPAC file to run",
+            "required": true
+        },
+        {
+            "name": "serverName",
+            "type": "string",
+            "label": "Server Name",
+            "required": true,
+            "helpMarkDown": "Instance name of the SQL Server"
+        },
+        {
+            "name": "databaseName",
+            "type": "string",
+            "label": "Database Name",
+            "required": true
+        },
+        {
+            "name": "userName",
+            "type": "string",
+            "label": "SQL Server Login",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
+        },
+        {
+            "name": "userPassword",
+            "type": "string",
+            "label": "SQL Server Authentication password",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        }
+    ],
+    "instanceNameFormat": "Run a DACPAC package on $(databaseName)",
+    "execution": {
+        "PowerShell3": {
+            "target": "RunDACPAC.ps1"}
+    }
+}

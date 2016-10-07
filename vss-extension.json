@@ -46,6 +46,9 @@
         },
         {
             "path": "RunSqlCommand"
+        },
+        {
+            "path": "RunDACPAC"
         }
     ],
     "contributions": [
@@ -89,7 +92,7 @@
                 "name": "RunStoredProcedure"
             }
         },
-           {
+        {
             "id": "runsqlcommand",
             "type": "ms.vss-distributed-task.task",
             "targets": [
@@ -97,6 +100,16 @@
             ],
             "properties": {
                 "name": "RunSqlCommand"
+            }
+        },
+        {
+            "id": "rundacpac",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "RunDACPAC"
             }
         }
     ]
