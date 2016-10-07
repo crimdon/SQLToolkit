@@ -22,6 +22,9 @@ This is a set of build and deployment tasks to support SQL Server.
 - RunSingleSqlScript
 -- This task will run a specified SQL script against your database.
 
+- RunDACPAC
+-- This task will deploy a specified DACPAC package file against your database.
+
 
 ## Setup
 
