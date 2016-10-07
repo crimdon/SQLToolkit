@@ -14,6 +14,12 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword;
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
 
+	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
+	{
+		Add-PSSnapin SqlServerCmdletSnapin100
+        Add-PSSnapin SqlServerProviderSnapin100
+	}
+
 	Write-Host "Running all scripts in $pathToScripts";
 
 	foreach ($f in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
@@ -23,11 +29,11 @@ Try
 		#Execute the query
 		if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName;
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop';
 		}
 		else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -Username $userName -Password $userPassword -QueryTimeout $queryTimeout;
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop';
 		}
 	}
 
@@ -36,8 +42,7 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL scripts";
-	Write-Error $_.Exception.GetType().FullName;
-	Write-Error $_.Exception.Message;
+	Write-Host "Error running SQL script: $f.FullName" -ForegroundColor Red
+	Write-Host "SQL error: $_" -ForegroundColor Red
 }
 

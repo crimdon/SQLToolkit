@@ -14,8 +14,13 @@ Try
 		[string]$withInit = Get-VstsInput -Name withInit
 		[string]$userName = Get-VstsInput -Name userName
 		[string]$userPassword = Get-VstsInput -Name userPassword
-        [string]$userPassword = Get-VstsInput -Name queryTimeout
-		
+        [string]$queryTimeout = Get-VstsInput -Name queryTimeout
+
+		if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
+		{
+			Add-PSSnapin SqlServerCmdletSnapin100
+			Add-PSSnapin SqlServerProviderSnapin100
+		}
 		
 		#Specify the Action property to generate a FULL backup
 		switch($backupType.ToLower())
@@ -51,12 +56,12 @@ Try
 		if([string]::IsNullOrEmpty($userName))
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
 		}
 		else
 		{
 			Write-Host $query
-			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Query $query -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
 		}
 		
 		Write-Host "Finished"
@@ -64,9 +69,7 @@ Try
 	
 Catch
 	{
-		Write-Error "Error running SQL backup";
-		Write-Error $_.Exception.GetType().FullName;
-		Write-Error $_.Exception.Message;
+		Write-Host "Error running SQL backup: $_" -ForegroundColor Red
 	}
 
 

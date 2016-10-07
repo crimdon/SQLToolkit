@@ -14,16 +14,22 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
+	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
+	{
+		Add-PSSnapin SqlServerCmdletSnapin100
+        Add-PSSnapin SqlServerProviderSnapin100
+	}
+
 	Write-Host "Running Script " $sqlScript " on Database " $databaseName
 		
 	#Execute the query
 	if([string]::IsNullOrEmpty($userName))
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
 		}
 	else
 		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword -QueryTimeout $queryTimeout
+			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $sqlScript -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
 		}
 
 	Write-Host "Finished"
@@ -31,8 +37,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL script"
-	Write-Debug $_.Exception.GetType().FullName
-	Write-Error $_.Exception.Message
+	Write-Host "Error running SQL script: $_" -ForegroundColor Red
 }
 
