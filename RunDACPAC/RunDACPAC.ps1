@@ -32,7 +32,7 @@ Try
 		}
 	}
 	
-	if(!dacDllPath)
+	if(!$dacDllPath)
 	{
 		Write-Error "DACPAC runtime not found, make sure the task executes on a machine with SQL Server tools installed"
 		exit
