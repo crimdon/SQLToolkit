@@ -1,4 +1,4 @@
-﻿# this function runs all the SQL scripts in a supplied folder against the supplied server
+﻿# This task deploys a DACPAC file using the DACPAC runtime that is expected to be present on the execution server
 [CmdletBinding()]
 Param()
 
