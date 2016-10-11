@@ -69,7 +69,7 @@ Try
 	
 Catch
 	{
-		Write-Host "Error running SQL backup: $_" -ForegroundColor Red
+		Write-Error "Error running SQL backup: $_" -ForegroundColor Red
 	}
 
 

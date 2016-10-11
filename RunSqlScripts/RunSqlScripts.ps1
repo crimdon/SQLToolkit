@@ -42,7 +42,7 @@ Try
 
 catch
 {
-	Write-Host "Error running SQL script: $f.FullName" -ForegroundColor Red
-	Write-Host "SQL error: $_" -ForegroundColor Red
+	Write-Error "Error running SQL script: $f.FullName" -ForegroundColor Red
+	Write-Error "SQL error: $_" -ForegroundColor Red
 }
 
