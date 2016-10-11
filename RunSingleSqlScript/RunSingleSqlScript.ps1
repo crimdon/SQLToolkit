@@ -37,6 +37,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL script: $_" -ForegroundColor Red
+	Write-Error "Error running SQL script: $_"
 }
 

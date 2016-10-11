@@ -38,6 +38,6 @@ Try
 
 catch
 {
-	Write-Error "Error running SQL command: $_" -ForegroundColor Red
+	Write-Error "Error running SQL command: $_"
 }
 

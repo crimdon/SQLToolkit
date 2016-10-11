@@ -42,6 +42,6 @@ Try
 
 catch
 {
-	Write-Error "Error running Stored Procedure: $_" -ForegroundColor Red
+	Write-Error "Error running Stored Procedure: $_"
 }
 
