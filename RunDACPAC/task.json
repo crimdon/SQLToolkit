@@ -1,14 +1,14 @@
 {
-    "id": "75e0df60-f8c3-44b5-a48f-83f4ff71ae4b",
-    "name": "RunSingleSqlScript",
-    "friendlyName": "Run Single SQL Script",
-    "description": "Allows you to run SQL Scripts",
+    "id": "3E7191F2-D225-4AFF-A173-38ECA9D29B36",
+    "name": "RunDACPAC",
+    "friendlyName": "Run a DACPAC file",
+    "description": "Allows you to run DACPAC packages",
     "author": "Andrew Lackenby",
     "category": "Utility",
     "version": {
         "Major": "1",
-        "Minor": "6",
-        "Patch": "3"
+        "Minor": "0",
+        "Patch": "0"
     },
     "groups": [
         {
@@ -20,9 +20,9 @@
     "minimumAgentVersion": "1.83.0",
     "inputs": [
        {
-            "name": "sqlScript",
+            "name": "packagePath",
             "type": "filePath",
-            "label": "Specify SQL Script to run",
+            "label": "Specify a DACPAC file to run",
             "required": true
         },
         {
@@ -46,26 +46,18 @@
             "groupName": "advanced",
             "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
         },
-                {
+        {
             "name": "userPassword",
             "type": "string",
             "label": "SQL Server Authentication password",
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
-        },
-        {
-            "name": "queryTimeout",
-            "type": "string",
-            "label": "Query Timeout",
-            "required": true,
-            "defaultValue": "30",
-            "groupName": "advanced"
         }
     ],
-    "instanceNameFormat": "Run Sql Scripts on $(databaseName)",
+    "instanceNameFormat": "Run a DACPAC package on $(databaseName)",
     "execution": {
         "PowerShell3": {
-            "target": "RunSingleSqlScript.ps1"}
+            "target": "RunDACPAC.ps1"}
     }
 }
