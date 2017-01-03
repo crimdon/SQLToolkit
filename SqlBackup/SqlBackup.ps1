@@ -12,6 +12,7 @@ Try
 		[string]$databaseName = Get-VstsInput -Name databaseName
 		[string]$backupFile = Get-VstsInput -Name backupFile
 		[string]$withInit = Get-VstsInput -Name withInit
+		[string]$copyOnly = Get-VstsInput -Name copyOnly
 		[string]$userName = Get-VstsInput -Name userName
 		[string]$userPassword = Get-VstsInput -Name userPassword
         [string]$queryTimeout = Get-VstsInput -Name queryTimeout
@@ -44,7 +45,11 @@ Try
 		}
 		else
 		{
-			$withOptions = $mediaInit
+			switch($copyOnly)
+			{
+				$false {$withOptions = $mediaInit}
+				$true {$withOptions = $mediaInit + ", COPY_ONLY"}
+			}
 		}
 		
 		#Build the backup query using Windows Authenication

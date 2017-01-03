@@ -8,7 +8,7 @@
     "version": {
         "Major": "1",
         "Minor": "6",
-        "Patch": "4"
+        "Patch": "5"
     },
     "groups": [
         {
@@ -61,6 +61,15 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Controls whether the backup operation appends to or overwrites the existing backup sets on the backup media"
+        },
+        {
+            "name": "copyOnly",
+            "type": "boolean",
+            "label": "Copy-only backup",
+            "defaultValue":"false",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Create an independant backup without effecting the sequence of existing SQL backups. COPY_ONLY has no effect when specified with the DIFFERENTIAL option."
         },
         {
             "name": "userName",
