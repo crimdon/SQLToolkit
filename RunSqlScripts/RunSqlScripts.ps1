@@ -14,35 +14,42 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword;
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
 
-	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
-	{
-		Add-PSSnapin SqlServerCmdletSnapin100
-        Add-PSSnapin SqlServerProviderSnapin100
-	}
+	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
+    $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
+	
+	if([string]::IsNullOrEmpty($userName)) {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
+    }
+    else {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
+    }
+
+    $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
+    $SqlConnection.add_InfoMessage($handler) 
+	$SqlConnection.Open()
+	$SqlCmd = New-Object System.Data.SqlClient.SqlCommand
+	$SqlCmd.Connection = $SqlConnection
+	$SqlCmd.CommandTimeout = $queryTimeout
 
 	Write-Host "Running all scripts in $pathToScripts";
 
-	foreach ($f in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
+	foreach ($script in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
 	{	
-		Write-Host "Running Script " $f.Name;
+		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		if([string]::IsNullOrEmpty($userName))
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop';
-		}
-		else
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -InputFile $f.FullName -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop';
-		}
+		$Query = [IO.File]::ReadAllText("$($sqlScript.FullName)")
+		$SqlCmd.CommandText = $Query
+		$reader = $SqlCmd.ExecuteNonQuery()
 	}
 
+	$SqlConnection.Close()
 	Write-Host "Finished";
 }
 
 catch
 {
-	Write-Error "Error running SQL script: $f.FullName"
-	Write-Error "SQL error: $_" -ForegroundColor Red
+	Write-Host "Error running SQL script: $_" -ForegroundColor Red
+	throw $_
 }
 

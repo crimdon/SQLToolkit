@@ -15,33 +15,38 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
-	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
-	{
-		Add-PSSnapin SqlServerCmdletSnapin100
-        Add-PSSnapin SqlServerProviderSnapin100
-	}
+	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
+    $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
+	
+	if([string]::IsNullOrEmpty($userName)) {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30"		
+    }
+    else {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
+    }
 
-	Write-Host "Running Stored Procedure " $sprocName " on Database " $databaseName
+    $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
+    $SqlConnection.add_InfoMessage($handler) 
+	$SqlConnection.Open()
+	$SqlCmd = New-Object System.Data.SqlClient.SqlCommand
+	$SqlCmd.Connection = $SqlConnection
+	$SqlCmd.CommandTimeout = $queryTimeout
 	
 	#Construct to the SQL to run
 	
 	[string]$sqlQuery = "EXEC " + $sprocName + " " + $sprocParameters
 		
 	#Execute the query
-	if([string]::IsNullOrEmpty($userName))
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
-		}
-	else
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query $sqlQuery -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true  -ErrorAction 'Stop'
-		}
+	$SqlCmd.CommandText = $sqlQuery
+	$reader = $SqlCmd.ExecuteNonQuery()
 
+	$SqlConnection.Close()
 	Write-Host "Finished"
 }
 
 catch
 {
-	Write-Error "Error running Stored Procedure: $_"
+	Write-Host "Error running SQL script: $_" -ForegroundColor Red
+	throw $_
 }
 
