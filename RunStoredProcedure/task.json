@@ -1,6 +1,6 @@
 {
     "id": "6cf13cc2-b9c7-4164-af9e-1d5a0db47a6b",
-    "name": "RunSingleSqlScript",
+    "name": "RunStoredSqlScript",
     "friendlyName": "Run SQL Stored Procedure",
     "description": "Allows you to run a SQL Stored Procedure",
     "author": "Andrew Lackenby",
@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "0",
-        "Patch": "1"
+        "Patch": "2"
     },
     "groups": [
         {

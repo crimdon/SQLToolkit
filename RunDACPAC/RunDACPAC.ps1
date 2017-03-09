@@ -40,8 +40,7 @@ Try
 
 	Add-Type -Path "$dacDllPath\\Microsoft.SqlServer.Dac.dll"
 	$service = New-Object Microsoft.SqlServer.Dac.DacServices $connString
-	$handler = [Microsoft.SqlServer.Dac.DacServices.Messages] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
-	$service.add_InfoMessage($handler)
+	Register-ObjectEvent -InputObject $service -EventName "Message" -Action { Write-Host $EventArgs.Message.Message } | out-null
 	$package = [Microsoft.SqlServer.Dac.DacPackage]::Load($packagePath)
 	$service.Deploy($package, $databaseName, $true, $null, $null) 
 

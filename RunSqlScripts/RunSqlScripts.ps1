@@ -33,7 +33,7 @@ Try
 
 	Write-Host "Running all scripts in $pathToScripts";
 
-	foreach ($script in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
+	foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
 	{	
 		Write-Host "Running Script " $sqlScript.Name
 		
