@@ -6,38 +6,46 @@ Trace-VstsEnteringInvocation $MyInvocation
 
 Try
 {
+	$ErrorActionPreference = "Stop";
+
 	Import-VstsLocStrings "$PSScriptRoot\Task.json"
 	[string]$serverName = Get-VstsInput -Name serverName
 	[string]$databaseName = Get-VstsInput -Name databaseName
 	[string]$sqlCommand = Get-VstsInput -Name sqlCommand
-	[string]$sprocParameters = Get-VstsInput -Name sprocParamters
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
+	
+	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
+	$SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 
-	if(!(Get-Command "Invoke-Sqlcmd" -errorAction SilentlyContinue))
-	{
-		Add-PSSnapin SqlServerCmdletSnapin100
-        Add-PSSnapin SqlServerProviderSnapin100
-	}
+	if([string]::IsNullOrEmpty($userName)) {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
+    }
+    else {
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
+    }
 
+    $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
+    $SqlConnection.add_InfoMessage($handler) 
+	$SqlConnection.Open()
+	$SqlCmd = New-Object System.Data.SqlClient.SqlCommand
+	$SqlCmd.Connection = $SqlConnection
+	$SqlCmd.CommandTimeout = $queryTimeout
+		
 	Write-Host "Running SQl Command on Database " $databaseName
 		
 	#Execute the query
-	if([string]::IsNullOrEmpty($userName))
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
-		}
-	else
-		{
-			Invoke-Sqlcmd -ServerInstance $serverName -Database $databaseName -Query "$sqlCommand" -Username $userName -Password $userPassword -QueryTimeout $queryTimeout -OutputSqlErrors $true -ErrorAction 'Stop'
-		}
+	$SqlCmd.CommandText = $sqlCommand
+	$reader = $SqlCmd.ExecuteNonQuery()
 
+	$SqlConnection.Close()
 	Write-Host "Finished"
 }
 
-catch
+Catch
 {
-	Write-Error "Error running SQL command: $_"
+	Write-Host "Error running SQL command: $_" -ForegroundColor Red
+	throw $_
 }
 

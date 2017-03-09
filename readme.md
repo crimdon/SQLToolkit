@@ -2,8 +2,8 @@
 
 This is a set of build and deployment tasks to support SQL Server.
 -- This extension supports on premises SQL servers only. It will not work for Azure or Visual Studio Team Services
--- New version no longer needs SQL Server Management Objects (SMO).
--- You can use SQL Authenication to run these tasks.
+-- Major update. This version no longer uses the Powershell commandlet Involk-Sqlcmd as there were bugs regarding error handling. 
+-- Also Informational messages from TSQL commands such as PRINT will be displayed.
 
 ## Tasks
 
@@ -28,10 +28,8 @@ This is a set of build and deployment tasks to support SQL Server.
 
 ## Setup
 
-In order to run this extension, the SQL Powershell modules must be installed on the server running
+In order to run this extension, SQL Managed Objects must be installed on the server running
 the build agent.
-
-[Import the SQLPS Module](https://msdn.microsoft.com/en-GB/library/hh231286.aspx)
 
 ## Website:
 
