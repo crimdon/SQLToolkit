@@ -12,6 +12,7 @@ Try
 	[string]$databaseName = Get-VstsInput -Name databaseName
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
+	[string]$logProgress = Get-VstsInput -Name logProgress
 
 	Write-Host "Running DACPAC " $packagePath " on Database " $databaseName
 		
@@ -40,7 +41,10 @@ Try
 
 	Add-Type -Path "$dacDllPath\\Microsoft.SqlServer.Dac.dll"
 	$service = New-Object Microsoft.SqlServer.Dac.DacServices $connString
-	Register-ObjectEvent -InputObject $service -EventName "Message" -Action { Write-Host $EventArgs.Message.Message } | out-null
+	if(-not [string]::IsNullOrEmpty($logProgress))
+	{
+		Register-ObjectEvent -InputObject $service -EventName "Message" -Action { Write-Host $EventArgs.Message.Message } | out-null
+	}
 	$package = [Microsoft.SqlServer.Dac.DacPackage]::Load($packagePath)
 	$service.Deploy($package, $databaseName, $true, $null, $null) 
 

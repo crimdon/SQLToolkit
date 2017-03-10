@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "0",
-        "Patch": "1"
+        "Patch": "3"
     },
     "groups": [
         {
@@ -53,6 +53,15 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        },
+        {
+            "name": "logProgress",
+            "type": "boolean",
+            "label": "Log progress from DACPAC",
+            "defaultValue":"false",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Requires higher privileges"
         }
     ],
     "instanceNameFormat": "Run a DACPAC package on $(databaseName)",
