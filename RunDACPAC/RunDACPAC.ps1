@@ -21,6 +21,10 @@ Try
 	{
 		$ConnString += "UID=$userName;PWD=$userPassword;" 
 	}
+	else 
+	{
+		$ConnString += "Trusted_Connection=True;"	
+	}
 
 	# Pick the right DACPAC runtime version
 	$dacDllPath = $null 

@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "0",
-        "Patch": "3"
+        "Patch": "4"
     },
     "groups": [
         {
@@ -61,7 +61,7 @@
             "defaultValue":"false",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Requires higher privileges"
+            "helpMarkDown": "Displays more details information when deploying the DACPAC"
         }
     ],
     "instanceNameFormat": "Run a DACPAC package on $(databaseName)",
