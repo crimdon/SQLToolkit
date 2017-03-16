@@ -14,6 +14,8 @@ Try
 	[string]$userPassword = Get-VstsInput -Name userPassword;
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
 
+	[string]$batchDelimiter = "[gG][oO]"
+
 	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 	
@@ -38,9 +40,16 @@ Try
 		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		$Query = [IO.File]::ReadAllText("$($sqlScript.FullName)")
-		$SqlCmd.CommandText = $Query
-		$reader = $SqlCmd.ExecuteNonQuery()
+		$scriptContent = [IO.File]::ReadAllText("$($sqlScript.FullName)")
+		$batches = $scriptContent -split "\s*$batchDelimiter\s*\r?\n"
+		foreach($batch in $batches)
+    	{
+        	if($batch.Trim() -ne "")
+        	{
+				$SqlCmd.CommandText = $batch
+				$reader = $SqlCmd.ExecuteNonQuery()
+			}
+		}
 	}
 
 	$SqlConnection.Close()

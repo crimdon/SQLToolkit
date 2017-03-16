@@ -13,6 +13,8 @@ Try {
     [string]$userPassword = Get-VstsInput -Name userPassword
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
+    [string]$batchDelimiter = "[gG][oO]"
+
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 	
@@ -34,8 +36,15 @@ Try {
 		
     #Execute the query
     $scriptContent = Get-Content $sqlScript | Out-String
-    $SqlCmd.CommandText = $scriptContent
-	$reader = $SqlCmd.ExecuteNonQuery()
+    $batches = $scriptContent -split "\s*$batchDelimiter\s*\r?\n"
+    foreach($batch in $batches)
+    {
+        if($batch.Trim() -ne "")
+        {
+            $SqlCmd.CommandText = $batch
+	        $reader = $SqlCmd.ExecuteNonQuery()
+        }
+    }
 
     $SqlConnection.Close()
     Write-Host "Finished"
