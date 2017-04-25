@@ -44,7 +44,7 @@ Try
 		$batches = $scriptContent -split "\s*$batchDelimiter\s*\r?\n"
 		foreach($batch in $batches)
     	{
-        	if($batch.Trim() -ne "")
+        	if(![string]::IsNullOrEmpty($batch.Trim()))
         	{
 				$SqlCmd.CommandText = $batch
 				$reader = $SqlCmd.ExecuteNonQuery()
