@@ -40,16 +40,8 @@ Try
 		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		$scriptContent = Get-Content $sqlScript.FullName | Out-String
-		$batches = $scriptContent -split "\s*$batchDelimiter\s*\r?\n"
-		foreach($batch in $batches)
-    	{
-        	if(![string]::IsNullOrEmpty($batch.Trim()))
-        	{
-				$SqlCmd.CommandText = $batch
-				$reader = $SqlCmd.ExecuteNonQuery()
-			}
-		}
+		(Get-Content $sqlScript.FullName | Out-String) -split '(?s)/\*.*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
 	}
 
 	$SqlConnection.Close()

@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "sql-toolkit",
     "name": "SQL Toolkit",
-    "version": "2.2.15",
+    "version": "2.2.20",
     "publisher": "andrewlackenby",
     "public": true,
 	"categories": [
