@@ -40,7 +40,7 @@ Try
 		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		$scriptContent = [IO.File]::ReadAllText("$($sqlScript.FullName)")
+		$scriptContent = Get-Content $sqlScript.FullName | Out-String
 		$batches = $scriptContent -split "\s*$batchDelimiter\s*\r?\n"
 		foreach($batch in $batches)
     	{

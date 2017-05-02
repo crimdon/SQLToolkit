@@ -15,6 +15,8 @@ Try
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
+
+	[string]$batchDelimiter = "[gG][oO]"
 	
 	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
 	$SqlConnection = New-Object System.Data.SqlClient.SqlConnection
@@ -36,8 +38,16 @@ Try
 	Write-Host "Running SQl Command on Database " $databaseName
 		
 	#Execute the query
-	$SqlCmd.CommandText = $sqlCommand
-	$reader = $SqlCmd.ExecuteNonQuery()
+	$batches = $sqlCommand -split "\s*$batchDelimiter\s*\r?\n"
+    foreach($batch in $batches)
+    {
+        if(![string]::IsNullOrEmpty($batch.Trim()))
+        {
+            $SqlCmd.CommandText = $batch
+	        $reader = $SqlCmd.ExecuteNonQuery()
+        }
+    }
+	
 
 	$SqlConnection.Close()
 	Write-Host "Finished"
