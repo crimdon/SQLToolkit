@@ -58,5 +58,6 @@ Try
 catch
 {
 	Write-Error "Error running DACPAC: $_"
+	$_ | format-list -force
 }
 
