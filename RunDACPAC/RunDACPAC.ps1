@@ -13,6 +13,7 @@ Try
 	[string]$userName = Get-VstsInput -Name userName
 	[string]$userPassword = Get-VstsInput -Name userPassword
 	[string]$logProgress = Get-VstsInput -Name logProgress
+	[bool]$createNewDatabase = Get-VstsInput -Name createNewDatabase -AsBool
 
 	Write-Host "Running DACPAC " $packagePath " on Database " $databaseName
 		
@@ -50,7 +51,11 @@ Try
 		Register-ObjectEvent -InputObject $service -EventName "Message" -Action { Write-Host $EventArgs.Message.Message } | out-null
 	}
 	$package = [Microsoft.SqlServer.Dac.DacPackage]::Load($packagePath)
-	$service.Deploy($package, $databaseName, $true, $null, $null) 
+
+	$options = New-Object Microsoft.SqlServer.Dac.DacDeployOptions
+	$options.CreateNewDatabase = $createNewDatabase
+
+	$service.Deploy($package, $databaseName, $true, $options, $null) 
 
 	Write-Host "Finished"
 }
@@ -58,6 +63,6 @@ Try
 catch
 {
 	Write-Error "Error running DACPAC: $_"
-	$_ | format-list -force
+	$_.Exception|format-list -force|Write-Error
 }
 

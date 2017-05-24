@@ -7,8 +7,8 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "0",
-        "Patch": "5"
+        "Minor": "1",
+        "Patch": "0"
     },
     "groups": [
         {
@@ -53,6 +53,15 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        },
+        {
+            "name": "createNewDatabase",
+            "type": "boolean",
+            "label": "Create new database",
+            "defaultValue":"false",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Specifies whether the existing database will be dropped and a new database created before proceeding with the actual deployment actions. Acquires single-user mode before dropping the existing database."
         },
         {
             "name": "logProgress",
