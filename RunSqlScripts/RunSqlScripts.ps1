@@ -40,7 +40,7 @@ Try
 		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		(Get-Content $sqlScript.FullName | Out-String) -split '(?s)/\*.*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+		(Get-Content $sqlScript.FullName | Out-String) -replace '/\*(.|[\r\n])*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
         ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
 	}
 
