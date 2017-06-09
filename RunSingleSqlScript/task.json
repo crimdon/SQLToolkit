@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "1",
-        "Patch": "11"
+        "Patch": "12"
     },
     "groups": [
         {
@@ -61,6 +61,19 @@
             "required": true,
             "defaultValue": "30",
             "groupName": "advanced"
+        },
+        {
+            "name": "removeComments",
+            "type": "pickList",
+            "label": "Remove Comments",
+            "defaultValue": "Yes",
+            "required": true,
+            "groupName":"advanced",
+            "options": {
+            "Yes": "Yes",
+            "No": "No"
+            },
+            "helpMarkDown": "If No is selected, the keyword GO will be replaced with G0."
         }
     ],
     "instanceNameFormat": "Run Sql Scripts on $(databaseName)",
