@@ -34,13 +34,15 @@ Try {
     Write-Host "Running Script " $sqlScript " on Database " $databaseName
 		
     #Execute the query
-    if ($removeComments -eq "Yes") {
-        (Get-Content $sqlScript.FullName | Out-String) -replace '(?s)/\*.*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
-            ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
-    }
-    else {
-        (Get-Content $sqlScript.FullName | Out-String) -split '\r?\ngo\r?\n' |
-            ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+    switch ($removeComments) {
+        $true {
+            (Get-Content $sqlScript | Out-String) -replace '/\*(.|[\r\n])*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+        }
+        $false {
+            (Get-Content $sqlScript | Out-String) -split '\r?\ngo\r?\n' |
+                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+        }
     }
 
     $SqlConnection.Close()
