@@ -7,8 +7,8 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "1",
-        "Patch": "8"
+        "Minor": "2",
+        "Patch": "0"
     },
     "groups": [
         {
@@ -37,6 +37,13 @@
             "type": "string",
             "label": "Database Name",
             "required": true
+        },
+        {
+            "name": "removeComments",
+            "type": "boolean",
+            "label": "Remove comments",
+            "defaultValue": true,
+            "helpMarkDown": "If comments are not removed the keyword Go cannot appear in them otherwise the task will fail."
         },
         {
             "name": "userName",
