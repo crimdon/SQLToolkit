@@ -34,8 +34,8 @@ Try {
     Write-Host "Running Script " $sqlScript " on Database " $databaseName
 		
     #Execute the query
-    if ($removeComments = = "Yes") {
-        (Get-Content $sqlScript.FullName | Out-String) -replace '/\*(.|[\r\n])*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+    if ($removeComments -eq "Yes") {
+        (Get-Content $sqlScript.FullName | Out-String) -replace '(?s)/\*.*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
             ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
     }
     else {
