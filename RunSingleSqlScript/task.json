@@ -73,7 +73,7 @@
             "Yes": "Yes",
             "No": "No"
             },
-            "helpMarkDown": "If No is selected, the keyword GO will be replaced with G0."
+            "helpMarkDown": "If No is selected, the keyword GO cannot appear in any of the comments otherwise the task will fail."
         }
     ],
     "instanceNameFormat": "Run Sql Scripts on $(databaseName)",
