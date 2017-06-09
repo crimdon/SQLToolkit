@@ -13,8 +13,7 @@ Try
 	[string]$userName = Get-VstsInput -Name userName;
 	[string]$userPassword = Get-VstsInput -Name userPassword;
 	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
-
-	[string]$batchDelimiter = "[gG][oO]"
+	[string]$removeComments = Get-VstsInput -Name removeComments;
 
 	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
@@ -40,8 +39,15 @@ Try
 		Write-Host "Running Script " $sqlScript.Name
 		
 		#Execute the query
-		(Get-Content $sqlScript.FullName | Out-String) -split '(?s)/\*.*?\*/' -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
-        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+		switch ($removeComments) {
+        $true {
+            (Get-Content $sqlScript | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+        }
+        $false {
+            (Get-Content $sqlScript | Out-String) -split '\r?\ngo\r?\n' |
+                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+        }
 	}
 
 	$SqlConnection.Close()
