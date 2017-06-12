@@ -4,21 +4,20 @@ Param()
 
 Trace-VstsEnteringInvocation $MyInvocation;
 
-Try
-{
-	Import-VstsLocStrings "$PSScriptRoot\Task.json";
+Try {
+    Import-VstsLocStrings "$PSScriptRoot\Task.json";
     [string]$pathToScripts = Get-VstsInput -Name pathToScripts;
-	[string]$serverName = Get-VstsInput -Name serverName;
-	[string]$databaseName = Get-VstsInput -Name databaseName;
-	[string]$userName = Get-VstsInput -Name userName;
-	[string]$userPassword = Get-VstsInput -Name userPassword;
-	[string]$queryTimeout = Get-VstsInput -Name queryTimeout;
-	[string]$removeComments = Get-VstsInput -Name removeComments;
+    [string]$serverName = Get-VstsInput -Name serverName;
+    [string]$databaseName = Get-VstsInput -Name databaseName;
+    [string]$userName = Get-VstsInput -Name userName;
+    [string]$userPassword = Get-VstsInput -Name userPassword;
+    [string]$queryTimeout = Get-VstsInput -Name queryTimeout;
+    [string]$removeComments = Get-VstsInput -Name removeComments;
 
-	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
+    [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 	
-	if([string]::IsNullOrEmpty($userName)) {
+    if ([string]::IsNullOrEmpty($userName)) {
         $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
     }
     else {
@@ -27,36 +26,35 @@ Try
 
     $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
     $SqlConnection.add_InfoMessage($handler) 
-	$SqlConnection.Open()
-	$SqlCmd = New-Object System.Data.SqlClient.SqlCommand
-	$SqlCmd.Connection = $SqlConnection
-	$SqlCmd.CommandTimeout = $queryTimeout
+    $SqlConnection.Open()
+    $SqlCmd = New-Object System.Data.SqlClient.SqlCommand
+    $SqlCmd.Connection = $SqlConnection
+    $SqlCmd.CommandTimeout = $queryTimeout
 
-	Write-Host "Running all scripts in $pathToScripts";
+    Write-Host "Running all scripts in $pathToScripts";
 
-	foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object)
-	{	
-		Write-Host "Running Script " $sqlScript.Name
+    foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
+        Write-Host "Running Script " $sqlScript.Name
 		
-		#Execute the query
-		switch ($removeComments) {
-        $true {
-            (Get-Content $sqlScript | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
-                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+        #Execute the query
+        switch ($removeComments) {
+            $true {
+                (Get-Content $sqlScript.FullName | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+                    ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+            }
+            $false {
+                (Get-Content $sqlScript.FullName | Out-String) -split '\r?\ngo\r?\n' |
+                    ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+            }
         }
-        $false {
-            (Get-Content $sqlScript | Out-String) -split '\r?\ngo\r?\n' |
-                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
-        }
-	}
+    }
 
-	$SqlConnection.Close()
-	Write-Host "Finished";
+    $SqlConnection.Close()
+    Write-Host "Finished";
 }
 
-catch
-{
-	Write-Host "Error running SQL script: $_" -ForegroundColor Red
-	throw $_
+catch {
+    Write-Host "Error running SQL script: $_" -ForegroundColor Red
+    throw $_
 }
 
