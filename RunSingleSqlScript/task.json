@@ -7,8 +7,8 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "2",
-        "Patch": "0"
+        "Minor": "3",
+        "Patch": "1"
     },
     "groups": [
         {
@@ -30,12 +30,12 @@
             "type": "string",
             "label": "Server Name",
             "required": true,
-            "helpMarkDown": "Instance name of the SQL Server"
+            "helpMarkDown": "Instance name of the SQL Server. Separate Multiple servers with a comma."
         },
         {
             "name": "databaseName",
             "type": "string",
-            "label": "Database Name",
+            "label": "Database Name. Separate multiple databases with a comma.",
             "required": true
         },
         {
