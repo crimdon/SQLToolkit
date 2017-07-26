@@ -24,6 +24,12 @@ Try {
             $databaseToProcess = $_
             Write-Host "Processing Database " $databaseToProcess
             $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
+
+            $server = $serverToProcess.Split(":")[0]
+            $port = $serverToProcess.Split(":")[1]
+            if(![string]::IsNullOrEmpty($port)){
+                $serverToProcess = $server + ',' + $port
+            }
 	
             if ([string]::IsNullOrEmpty($userName)) {
                 $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;Trusted_Connection=True;Connection Timeout=30"		

@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "3",
-        "Patch": "1"
+        "Patch": "3"
     },
     "groups": [
         {
@@ -30,7 +30,7 @@
             "type": "string",
             "label": "Server Name",
             "required": true,
-            "helpMarkDown": "Instance name of the SQL Server. Separate Multiple servers with a comma."
+            "helpMarkDown": "Instance name of the SQL Server. Separate Multiple servers with a comma. Non standard ports should be specifed as server:port"
         },
         {
             "name": "databaseName",
