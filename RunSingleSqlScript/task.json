@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "3",
-        "Patch": "3"
+        "Patch": "4"
     },
     "groups": [
         {
@@ -35,8 +35,9 @@
         {
             "name": "databaseName",
             "type": "string",
-            "label": "Database Name. Separate multiple databases with a comma.",
-            "required": true
+            "label": "Database Name",
+            "required": true,
+            "helpMarkDown": "Separate multiple databases with a comma."
         },
         {
             "name": "removeComments",
