@@ -7,6 +7,7 @@ Trace-VstsEnteringInvocation $MyInvocation;
 Try {
     Import-VstsLocStrings "$PSScriptRoot\Task.json";
     [string]$pathToScripts = Get-VstsInput -Name pathToScripts;
+    [string]$executionOrder = Get-VstsInput -Name executionOrder;
     [string]$serverName = Get-VstsInput -Name serverName;
     [string]$databaseName = Get-VstsInput -Name databaseName;
     [string]$userName = Get-VstsInput -Name userName;
@@ -28,7 +29,7 @@ Try {
 
             $server = $serverToProcess.Split(":")[0]
             $port = $serverToProcess.Split(":")[1]
-            if(![string]::IsNullOrEmpty($port)){
+            if (![string]::IsNullOrEmpty($port)) {
                 $serverToProcess = $server + ',' + $port
             }
 	
@@ -47,19 +48,38 @@ Try {
             $SqlCmd.CommandTimeout = $queryTimeout
 
             Write-Host "Running all scripts in $pathToScripts";
-
-            foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
-                Write-Host "Running Script " $sqlScript.Name
+            if ([string]::IsNullOrEmpty($executionOrder)) {
+                foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
+                    Write-Host "Running Script " $sqlScript.Name
 		
-                #Execute the query
-                switch ($removeComments) {
-                    $true {
-                        (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
-                            ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                    #Execute the query
+                    switch ($removeComments) {
+                        $true {
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        }
+                        $false {
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\ngo\r?\n' |
+                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        }
                     }
-                    $false {
-                        (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\ngo\r?\n' |
-                            ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                }
+            }
+            else {
+                Get-Content $executionOrder -Encoding UTF8 | ForEach-Object {
+                    $sqlScript = $pathToScripts + "\" + $_
+                    Write-Host "Running Script " $sqlScript
+                    
+                    #Execute the query
+                    switch ($removeComments) {
+                        $true {
+                            (Get-Content $sqlScript -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\ngo\r?\n' -notmatch '^\s*$' |
+                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        }
+                        $false {
+                            (Get-Content $sqlScript -Encoding UTF8 | Out-String) -split '\r?\ngo\r?\n' |
+                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        }
                     }
                 }
             }

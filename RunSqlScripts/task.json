@@ -7,7 +7,7 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "3",
+        "Minor": "4",
         "Patch": "1"
     },
     "groups": [
@@ -24,6 +24,13 @@
             "type": "filePath",
             "label": "Path to SQL Scripts",
             "required": true
+        },
+        {
+            "name": "executionOrder",
+            "type": "filePath",
+            "label": "File containing list of files to execute (optional)",
+            "required": false,
+            "helpMarkDown": "Put file names in here (including extension) in the order you wish them to be executed. One file name per line."
         },
         {
             "name": "serverName",
