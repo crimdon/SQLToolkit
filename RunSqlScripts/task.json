@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "4",
-        "Patch": "6"
+        "Patch": "8"
     },
     "groups": [
         {
@@ -27,7 +27,7 @@
         },
         {
             "name": "executionOrder",
-            "type": "string",
+            "type": "filePath",
             "label": "File containing list of files to execute (optional)",
             "required": false,
             "helpMarkDown": "Put file names in here (including extension) in the order you wish them to be executed. One file name per line."

@@ -47,6 +47,10 @@ Try {
             $SqlCmd.Connection = $SqlConnection
             $SqlCmd.CommandTimeout = $queryTimeout
 
+            if ($executionOrder -eq $Env:BUILD_SOURCESDIRECTORY)
+            {
+                $executionOrder = ""
+            }
             if ([string]::IsNullOrEmpty($executionOrder)) {
                 Write-Host "Running all scripts in $pathToScripts";
                 foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
@@ -66,9 +70,8 @@ Try {
                 }
             }
             else {
-                $TOCFile = $pathToScripts + "\" + $executionOrder
-                Write-Host "Using file $TOCFile"
-                Get-Content $TOCFile -Encoding UTF8 | ForEach-Object {
+                Write-Host "Using file $executionOrder"
+                Get-Content $executionOrder -Encoding UTF8 | ForEach-Object {
                     $sqlScript = $pathToScripts + "\" + $_
                     Write-Host "Running Script " $sqlScript
                     
