@@ -8,7 +8,11 @@
     "version": {
         "Major": "2",
         "Minor": "4",
+<<<<<<< HEAD
         "Patch": "8"
+=======
+        "Patch": "1"
+>>>>>>> parent of 6ade61c... Bug fix to TOC feature
     },
     "groups": [
         {
