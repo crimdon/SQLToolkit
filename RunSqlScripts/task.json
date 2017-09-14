@@ -8,11 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "4",
-<<<<<<< HEAD
-        "Patch": "8"
-=======
-        "Patch": "1"
->>>>>>> parent of 6ade61c... Bug fix to TOC feature
+        "Patch": "9"
     },
     "groups": [
         {
@@ -31,7 +27,7 @@
         },
         {
             "name": "executionOrder",
-            "type": "filePath",
+            "type": "string",
             "label": "File containing list of files to execute (optional)",
             "required": false,
             "helpMarkDown": "Put file names in here (including extension) in the order you wish them to be executed. One file name per line."

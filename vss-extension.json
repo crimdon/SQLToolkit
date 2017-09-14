@@ -2,11 +2,7 @@
     "manifestVersion": 1,
     "id": "sql-toolkit",
     "name": "SQL Toolkit",
-<<<<<<< HEAD
-    "version": "2.6.8",
-=======
-    "version": "2.6.1",
->>>>>>> parent of 6ade61c... Bug fix to TOC feature
+    "version": "2.6.9",
     "publisher": "andrewlackenby",
     "public": true,
 	"categories": [
