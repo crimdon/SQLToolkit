@@ -15,6 +15,7 @@ Try {
     [string]$userName = Get-VstsInput -Name userName
     [string]$userPassword = Get-VstsInput -Name userPassword
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout
+    [string]$backupCompression = Get-VstsInput -Name backupCompression
 
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
@@ -55,20 +56,26 @@ Try {
             $mediaInit = "INIT"
         }
     }
+
+    #Set copy only option
+    switch($copyOnly){
+        $false {$copyOnlyAction = ""}
+        $true {$copyOnlyAction = ", COPY_ONLY"}
+    }
+
+    #Set compression option
+    switch($backupCompression){
+        "Default"{$compressionAction = ""}
+        "Compress"{$compressionAction = ", COMPRESSION"}
+        "NoCompress" {$compressionAction = ", NO_COMPRESSION"}
+    }
 		
     #Set WITH options
     if($backupType -eq "differential") {
-        $withOptions = "DIFFERENTIAL, " + $mediaInit;
+        $withOptions = "DIFFERENTIAL, " + $mediaInit + $compressionAction;
     }
     else {
-        switch($copyOnly) {
-            $false {
-                $withOptions = $mediaInit
-            }
-            $true {
-                $withOptions = $mediaInit + ", COPY_ONLY"
-            }
-        }
+        $withOptions = $mediaInit + $copyOnlyAction + $compressionAction;
     }
 		
     #Build the backup query using Windows Authenication
