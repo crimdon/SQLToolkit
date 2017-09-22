@@ -20,7 +20,7 @@ Try {
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 
-    if([string]::IsNullOrEmpty($userName)) {
+    if ([string]::IsNullOrEmpty($userName)) {
         $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
     }
     else {
@@ -35,7 +35,7 @@ Try {
     $SqlCmd.CommandTimeout = $queryTimeout
 			
     #Specify the Action property to generate a FULL backup
-    switch($backupType.ToLower()) {
+    switch ($backupType.ToLower()) {
         "full" {
             $backupAction = "DATABASE"
         }
@@ -48,30 +48,37 @@ Try {
     }
 		
     #Initialize the backup if set
-    switch($withInit) {
+    switch ($withInit) {
         $false {
-            $mediaInit = "NOINIT"
+            $mediaInit = "NOFORMAT"
         }
         $true {
-            $mediaInit = "INIT"
+            $mediaInit = "FORMAT"
         }
     }
 
     #Set copy only option
-    switch($copyOnly){
+    switch ($copyOnly) {
         $false {$copyOnlyAction = ""}
         $true {$copyOnlyAction = ", COPY_ONLY"}
     }
 
     #Set compression option
-    switch($backupCompression){
-        "Default"{$compressionAction = ""}
-        "Compress"{$compressionAction = ", COMPRESSION"}
-        "NoCompress" {$compressionAction = ", NO_COMPRESSION"}
+    $sqlCmd.CommandText = "SELECT ISNULL((SELECT value FROM sys.configurations WHERE name = 'backup compression default'),-1)"
+    [int]$returnVal = $sqlCmd.ExecuteScalar()  
+    if ($returnVal -eq -1) {
+        $compressionAction = ""
     }
-		
+    else {
+        switch ($backupCompression) {
+            "Default" {$compressionAction = ""}
+            "Compress" {$compressionAction = ", COMPRESSION"}
+            "NoCompress" {$compressionAction = ", NO_COMPRESSION"}
+        }
+    }
+
     #Set WITH options
-    if($backupType -eq "differential") {
+    if ($backupType -eq "differential") {
         $withOptions = "DIFFERENTIAL, " + $mediaInit + $compressionAction;
     }
     else {
@@ -85,6 +92,7 @@ Try {
 		
     #Execute the backup
     $SqlCmd.CommandText = $sqlCommand
+    Write-Host $sqlCommand
     $reader = $SqlCmd.ExecuteNonQuery()
 
     $SqlConnection.Close()
@@ -96,10 +104,3 @@ Catch {
     Write-Host "Error running SQL Backup: $_" -ForegroundColor Red
     throw $_
 }
-
-
-
-
-
-
-
