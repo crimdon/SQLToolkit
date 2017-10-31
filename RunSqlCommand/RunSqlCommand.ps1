@@ -4,24 +4,23 @@ Param()
 
 Trace-VstsEnteringInvocation $MyInvocation
 
-Try
-{
-	$ErrorActionPreference = "Stop";
+Try {
+    $ErrorActionPreference = "Stop";
 
-	Import-VstsLocStrings "$PSScriptRoot\Task.json"
-	[string]$serverName = Get-VstsInput -Name serverName
-	[string]$databaseName = Get-VstsInput -Name databaseName
-	[string]$sqlCommand = Get-VstsInput -Name sqlCommand
-	[string]$userName = Get-VstsInput -Name userName
-	[string]$userPassword = Get-VstsInput -Name userPassword
-	[string]$queryTimeout = Get-VstsInput -Name queryTimeout
+    Import-VstsLocStrings "$PSScriptRoot\Task.json"
+    [string]$serverName = Get-VstsInput -Name serverName
+    [string]$databaseName = Get-VstsInput -Name databaseName
+    [string]$sqlCommand = Get-VstsInput -Name sqlCommand
+    [string]$userName = Get-VstsInput -Name userName
+    [string]$userPassword = Get-VstsInput -Name userPassword
+    [string]$queryTimeout = Get-VstsInput -Name queryTimeout
 
-	[string]$batchDelimiter = "[gG][oO]"
+    [string]$batchDelimiter = "[gG][oO]"
 	
-	[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
-	$SqlConnection = New-Object System.Data.SqlClient.SqlConnection
+    [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
+    $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 
-	if([string]::IsNullOrEmpty($userName)) {
+    if ([string]::IsNullOrEmpty($userName)) {
         $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
     }
     else {
@@ -30,32 +29,24 @@ Try
 
     $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
     $SqlConnection.add_InfoMessage($handler) 
-	$SqlConnection.Open()
-	$SqlCmd = New-Object System.Data.SqlClient.SqlCommand
-	$SqlCmd.Connection = $SqlConnection
-	$SqlCmd.CommandTimeout = $queryTimeout
+    $SqlConnection.Open()
+    $SqlCmd = New-Object System.Data.SqlClient.SqlCommand
+    $SqlCmd.Connection = $SqlConnection
+    $SqlCmd.CommandTimeout = $queryTimeout
 		
-	Write-Host "Running SQl Command on Database " $databaseName
+    Write-Host "Running SQl Command on Database " $databaseName
 		
-	#Execute the query
-	$batches = $sqlCommand -split "\s*$batchDelimiter\s*\r?\n"
-    foreach($batch in $batches)
-    {
-        if(![string]::IsNullOrEmpty($batch.Trim()))
-        {
-            $SqlCmd.CommandText = $batch
-	        $reader = $SqlCmd.ExecuteNonQuery()
-        }
+    #Execute the query
+    $sqlCommand -split '\r?\n\s*go' -notmatch '^\s*$' |
+        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery()
     }
-	
-
-	$SqlConnection.Close()
-	Write-Host "Finished"
+    $SqlConnection.Close()
+    Write-Host "Finished"
 }
 
-Catch
-{
-	Write-Host "Error running SQL command: $_" -ForegroundColor Red
-	throw $_
+
+Catch {
+    Write-Host "Error running SQL command: $_" -ForegroundColor Red
+    throw $_
 }
 
