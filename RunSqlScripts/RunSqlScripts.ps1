@@ -32,7 +32,9 @@ Try {
             if (![string]::IsNullOrEmpty($port)) {
                 $serverToProcess = $server + ',' + $port
             }
-	
+            
+            $databaseToProcess = $databaseToProcess -replace '[[\]]',''
+            
             if ([string]::IsNullOrEmpty($userName)) {
                 $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;Trusted_Connection=True;Connection Timeout=30;"		
             }
@@ -55,11 +57,11 @@ Try {
                     #Execute the query
                     switch ($removeComments) {
                         $true {
-                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go' -notmatch '^\s*$' |
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go\r\n?' -notmatch '^\s*$' |
                                 ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
                         }
                         $false {
-                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\n\s*go' -notmatch '^\s*$' |
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\n\s*go\r\n?' -notmatch '^\s*$' |
                                 ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
                         }
                     }
