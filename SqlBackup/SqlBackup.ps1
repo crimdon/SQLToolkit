@@ -21,10 +21,10 @@ Try {
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
 
     if ([string]::IsNullOrEmpty($userName)) {
-        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;Trusted_Connection=True;Connection Timeout=30;"		
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=master;Trusted_Connection=True;Connection Timeout=30;"		
     }
     else {
-        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=$databaseName;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
+        $SqlConnection.ConnectionString = "Server=$serverName;Initial Catalog=master;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
     }
 
     $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
