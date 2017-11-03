@@ -29,6 +29,8 @@ Try {
                 $serverToProcess = $server + ',' + $port
             }
 
+            $databaseToProcess = $databaseToProcess -replace '[[\]]',''
+
             if ([string]::IsNullOrEmpty($userName)) {
                 $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;Trusted_Connection=True;Connection Timeout=30;"		
             }
