@@ -1,4 +1,5 @@
-﻿# this function runs a SQL backup against the supplied server and database
+
+# this function runs a SQL backup against the supplied server and database
 [CmdletBinding()]
 Param()
 
@@ -16,6 +17,7 @@ Try {
     [string]$userPassword = Get-VstsInput -Name userPassword
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout
     [string]$backupCompression = Get-VstsInput -Name backupCompression
+    [string]$checkIfDatabaseExists = Get-VstsInput -Name checkIfDatabaseExists
 
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
@@ -84,9 +86,17 @@ Try {
     else {
         $withOptions = $mediaInit + $copyOnlyAction + $compressionAction;
     }
+    
+    #Set check if database exists
+    if($checkIfDatabaseExists) {
+    	$checkDatabase = "IF db_id('$databaseName') IS NOT NULL "
+    }
+    else {
+    	$checkDatabase = ""
+    }
 		
     #Build the backup query using Windows Authenication
-    $sqlCommand = "BACKUP " + $backupAction + " " + $databaseName + " TO DISK = N'" + $backupFile + "' WITH " + $withOptions; 
+    $sqlCommand = $checkDatabase + "BACKUP " + $backupAction + " " + $databaseName + " TO DISK = N'" + $backupFile + "' WITH " + $withOptions; 
 		
     Write-Host "Starting $backupType backup of $databaseName to $backupFile"
 		
