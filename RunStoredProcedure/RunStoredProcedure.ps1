@@ -35,7 +35,7 @@ Try {
                 $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;Trusted_Connection=True;Connection Timeout=30"		
             }
             else {
-                $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseProcess;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
+                $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;User ID=$userName;Password=$userPassword;Connection Timeout=30;"
             }
 
             $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message -ForegroundColor DarkBlue} 
