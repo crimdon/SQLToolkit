@@ -69,7 +69,16 @@
             "defaultValue":"false",
             "required": false,
             "groupName": "advanced",
-            "helpMarkDown": "Create an independant backup without effecting the sequence of existing SQL backups. COPY_ONLY has no effect when specified with the DIFFERENTIAL option."
+            "helpMarkDown": "Create an independent backup without effecting the sequence of existing SQL backups. COPY_ONLY has no effect when specified with the DIFFERENTIAL option."
+        },
+        {
+            "name": "checkIfDatabaseExists",
+            "type": "boolean",
+            "label": "Check if database exists",
+            "defaultValue":"false",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Add a check to only attempt to backup if the database exists."
         },
         {
             "name": "userName",
