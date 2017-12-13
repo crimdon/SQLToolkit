@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "1",
-        "Patch": "0"
+        "Patch": "1"
     },
     "groups": [
         {
@@ -71,6 +71,14 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Displays more details information when deploying the DACPAC"
+        },
+        {
+            "name": "toolsPath",
+            "type": "string",
+            "label": "Enter to path to the folder for the DAC binaries (sqlpackage.exe)",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "If left blank, the task will use the default location"
         }
     ],
     "instanceNameFormat": "Run a DACPAC package on $(databaseName)",
