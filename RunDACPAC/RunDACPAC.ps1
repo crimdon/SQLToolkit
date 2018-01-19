@@ -13,6 +13,7 @@ Try {
     [string]$userPassword = Get-VstsInput -Name userPassword
     [string]$logProgress = Get-VstsInput -Name logProgress
     [bool]$createNewDatabase = Get-VstsInput -Name createNewDatabase -AsBool
+    [bool]$blockOnPossibleDataLoss = Get-VstsInput -Name blockOnPossibleDataLoss -AsBool
     [string]$toolsPath = Get-VstsInput -Name toolsPath
 
     Write-Host "Running DACPAC " $packagePath " on Database " $databaseName
@@ -54,6 +55,11 @@ Try {
 
     $options = New-Object Microsoft.SqlServer.Dac.DacDeployOptions
     $options.CreateNewDatabase = $createNewDatabase
+    $options.BlockOnPossibleDataLoss = $blockOnPossibleDataLoss 
+
+    Write-Host "OPTIONS:"
+    Write-Host "-- Create New Database : " $options.CreateNewDatabase
+    Write-Host "-- Block on possible data loss : " $options.BlockOnPossibleDataLoss
 
     $service.Deploy($package, $databaseName, $true, $options, $null) 
 
