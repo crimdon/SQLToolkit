@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "1",
-        "Patch": "1"
+        "Patch": "2"
     },
     "groups": [
         {
@@ -62,6 +62,15 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Specifies whether the existing database will be dropped and a new database created before proceeding with the actual deployment actions. Acquires single-user mode before dropping the existing database."
+        },
+        {
+            "name": "blockOnPossibleDataLoss",
+            "type": "boolean",
+            "label": "Block on possible data loss",
+            "defaultValue":"true",
+            "required": false,
+            "groupName": "advanced",
+            "helpMarkDown": "Specifies whether deployment should stop if the operation could cause data loss. Default is to block."
         },
         {
             "name": "logProgress",
