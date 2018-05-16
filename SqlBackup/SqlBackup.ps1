@@ -96,7 +96,7 @@ Try {
     }
 		
     #Build the backup query using Windows Authenication
-    $sqlCommand = $checkDatabase + "BACKUP " + $backupAction + " " + $databaseName + " TO DISK = N'" + $backupFile + "' WITH " + $withOptions; 
+    $sqlCommand = $checkDatabase + "BACKUP " + $backupAction + " [" + $databaseName + "] TO DISK = N'" + $backupFile + "' WITH " + $withOptions; 
 		
     Write-Host "Starting $backupType backup of $databaseName to $backupFile"
 		
