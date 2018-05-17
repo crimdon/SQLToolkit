@@ -7,8 +7,8 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "4",
-        "Patch": "16"
+        "Minor": "5",
+        "Patch": "6"
     },
     "groups": [
         {
@@ -68,6 +68,15 @@
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
+        },  
+        {
+            "name": "continueAfterError",
+            "type": "boolean",
+            "label": "Continue After error",
+            "required": false,
+            "defaultValue": false,
+            "groupName": "advanced",
+            "helpMarkDown": "If an error occurs on a script, continue to the next one rather than aborting the entire batch."
         },
         {
             "name": "queryTimeout",
