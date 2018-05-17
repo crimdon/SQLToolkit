@@ -14,6 +14,7 @@ Try {
     [string]$userPassword = Get-VstsInput -Name userPassword;
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout;
     [string]$removeComments = Get-VstsInput -Name removeComments;
+    [string]$continueAfterError = Get-VstsInput -Name continueAfterError;
 
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
 
@@ -33,7 +34,7 @@ Try {
                 $serverToProcess = $server + ',' + $port
             }
             
-            $databaseToProcess = $databaseToProcess -replace '[[\]]',''
+            $databaseToProcess = $databaseToProcess -replace '[[\]]', ''
             
             if ([string]::IsNullOrEmpty($userName)) {
                 $SqlConnection.ConnectionString = "Server=$serverToProcess;Initial Catalog=$databaseToProcess;Trusted_Connection=True;Connection Timeout=30;"		
@@ -58,11 +59,37 @@ Try {
                     switch ($removeComments) {
                         $true {
                             (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                                ForEach-Object { 
+                                Try {
+                                    $SqlCmd.CommandText = $_.Trim(); 
+                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                }
+                                Catch {
+                                    switch ($continueAfterError) {
+                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $false {
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                        }
+                                    }
+                                } }
                         }
                         $false {
                             (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                                ForEach-Object 
+                            { 
+                                Try {
+                                    $SqlCmd.CommandText = $_.Trim(); 
+                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                }
+                                Catch {
+                                    switch ($continueAfterError) {
+                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $false {
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -79,11 +106,35 @@ Try {
                     switch ($removeComments) {
                         $true {
                             (Get-Content $sqlScript -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                                ForEach-Object { 
+                                Try {
+                                    $SqlCmd.CommandText = $_.Trim(); 
+                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                }
+                                Catch {
+                                    switch ($continueAfterError) {
+                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $false {
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                        }
+                                    }
+                                } }
                         }
                         $false {
                             (Get-Content $sqlScript -Encoding UTF8 | Out-String) -split '\r?\n\s*go\s*\r\n?' |
-                                ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                                ForEach-Object { 
+                                Try {
+                                    $SqlCmd.CommandText = $_.Trim(); 
+                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                }
+                                Catch {
+                                    switch ($continueAfterError) {
+                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $false {
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                        }
+                                    }
+                                } }
                         }
                     }
                 }
@@ -98,7 +149,7 @@ Try {
 }
 
 catch {
-    Write-Host "Error running SQL script: $_" -ForegroundColor Red
-    throw $_
+    Write-Host "Error running SQL script" -ForegroundColor:Red;
+    throw;
 }
 
