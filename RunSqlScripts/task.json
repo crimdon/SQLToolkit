@@ -8,7 +8,7 @@
     "version": {
         "Major": "2",
         "Minor": "5",
-        "Patch": "6"
+        "Patch": "7"
     },
     "groups": [
         {
@@ -19,7 +19,7 @@
     ],
     "minimumAgentVersion": "1.83.0",
     "inputs": [
-       {
+        {
             "name": "pathToScripts",
             "type": "filePath",
             "label": "Path to SQL Scripts",
@@ -39,7 +39,7 @@
             "required": true,
             "helpMarkDown": "Instance name of the SQL Server. Separate multiple servers with a comma. Non standard ports should be specifed as server:port"
         },
-         {
+        {
             "name": "databaseName",
             "type": "string",
             "label": "Database Name",
@@ -51,6 +51,7 @@
             "type": "boolean",
             "label": "Remove comments",
             "defaultValue": true,
+            "required": false,
             "helpMarkDown": "If comments are not removed the keyword Go cannot appear in them otherwise the task will fail."
         },
         {
@@ -61,14 +62,14 @@
             "groupName": "advanced",
             "helpMarkDown": "Login using SQL Authentication. Otherwise uses the login the build agent service runs under"
         },
-                {
+        {
             "name": "userPassword",
             "type": "string",
             "label": "SQL Server Authentication password",
             "required": false,
             "groupName": "advanced",
             "helpMarkDown": "Password for SQL Authenication. You should use a secret variable here."
-        },  
+        },
         {
             "name": "continueAfterError",
             "type": "boolean",
@@ -90,6 +91,7 @@
     "instanceNameFormat": "Run Sql Scripts on $(databaseName)",
     "execution": {
         "PowerShell3": {
-            "target": "RunSqlScripts.ps1"}
+            "target": "RunSqlScripts.ps1"
+        }
     }
 }

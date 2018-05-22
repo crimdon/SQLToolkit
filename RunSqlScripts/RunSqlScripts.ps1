@@ -62,30 +62,32 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
-                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                    $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
                                         $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
+                                            throw "Fatal error ocurred.";
                                         }
                                     }
-                                } }
+                                } 
+                            }
                         }
                         $false {
                             (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                                ForEach-Object 
-                            { 
+                                ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
-                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                    $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
                                         $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
+                                            throw "Fatal error ocurred.";
                                         }
                                     }
                                 }
@@ -109,13 +111,14 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
-                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                    $reader = $SqlCmd.ExecuteNonQuery();
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
                                         $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
+                                            throw "Fatal error ocurred.";
                                         }
                                     }
                                 } }
@@ -125,16 +128,18 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
-                                    $reader = $SqlCmd.ExecuteNonQuery() 
+                                    $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
                                         $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; throw;
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
+                                            throw "Fatal error ocurred.";
                                         }
                                     }
-                                } }
+                                } 
+                            }
                         }
                     }
                 }
@@ -149,7 +154,7 @@ Try {
 }
 
 catch {
-    Write-Host "Error running SQL script" -ForegroundColor:Red;
-    throw;
+    Write-Error "Error running SQL script";
+    throw "Fatal error ocurred.";
 }
 
