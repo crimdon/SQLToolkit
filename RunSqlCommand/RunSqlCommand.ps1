@@ -37,7 +37,7 @@ Try {
     Write-Host "Running SQl Command on Database " $databaseName
 		
     #Execute the query
-    $sqlCommand -split '\r?\n\s*go' -notmatch '^\s*$' |
+    $sqlCommand -split '(\r?\n\s*go\s*\r?\n)|(^go\s*\r?\n)|(\r?\n\s*go)' -notmatch '^\s*$' |
         ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery()
     }
     $SqlConnection.Close()
