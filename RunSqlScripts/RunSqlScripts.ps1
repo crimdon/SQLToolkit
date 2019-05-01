@@ -58,7 +58,7 @@ Try {
                     #Execute the query
                     switch ($removeComments) {
                         $true {
-                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '(\r?\n\s*go\s*\r?\n)|(^go\s*\r?\n)|(\r?\n\s*go)' -notmatch '^\s*$' |
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
@@ -76,7 +76,7 @@ Try {
                             }
                         }
                         $false {
-                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '(\r?\n\s*go\s*\r?\n)|(^go\s*\r?\n)|(\r?\n\s*go)' -notmatch '^\s*$' |
+                            (Get-Content $sqlScript.FullName -Encoding UTF8 | Out-String) -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
