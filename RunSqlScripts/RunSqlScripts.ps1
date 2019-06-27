@@ -66,10 +66,10 @@ Try {
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
-                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $true { Write-Host "$($SqlCmd.CommandText) resulted in an error $_"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
-                                            throw "Fatal error ocurred.";
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error $_" -ForegroundColor Red; 
+                                            throw $_;
                                         }
                                     }
                                 } 
@@ -84,10 +84,10 @@ Try {
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
-                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $true { Write-Host "$($SqlCmd.CommandText) resulted in an error $_"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
-                                            throw "Fatal error ocurred.";
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error $_" -ForegroundColor Red; 
+                                            throw $_;
                                         }
                                     }
                                 }
@@ -115,10 +115,10 @@ Try {
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
-                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $true { Write-Host "$($SqlCmd.CommandText) resulted in an error $_"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
-                                            throw "Fatal error ocurred.";
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error $_" -ForegroundColor Red; 
+                                            throw $_;
                                         }
                                     }
                                 } }
@@ -132,10 +132,10 @@ Try {
                                 }
                                 Catch {
                                     switch ($continueAfterError) {
-                                        $true {Write-Host "$($SqlCmd.CommandText) resulted in an error"; }
+                                        $true { Write-Host "$($SqlCmd.CommandText) resulted in an error $_"; }
                                         $false {
-                                            Write-Host "$($SqlCmd.CommandText) resulted in an error"; 
-                                            throw "Fatal error ocurred.";
+                                            Write-Host "$($SqlCmd.CommandText) resulted in an error $_" -ForegroundColor Red; 
+                                            throw $_;
                                         }
                                     }
                                 } 
@@ -154,7 +154,7 @@ Try {
 }
 
 catch {
-    Write-Error "Error running SQL script";
-    throw "Fatal error ocurred.";
+    Write-Error "Error running SQL script $_";
+    throw $_;
 }
 
