@@ -4,6 +4,16 @@ Param()
 
 Trace-VstsEnteringInvocation $MyInvocation
 
+function ReplaceParameters {
+    if ([string]::IsNullOrEmpty($SQLparameters)) {
+        return;
+    }
+    $SQLparameters.Split(",") | ForEach-Object {
+        $param,$paramvalue = $_.Split("=").Trim();
+        $SqlCmd.CommandText = $SqlCmd.CommandText.replace($param, $paramvalue);
+    }   
+}
+
 Try {
     Import-VstsLocStrings "$PSScriptRoot\Task.json"
     [string]$sqlScript = Get-VstsInput -Name sqlScript
@@ -12,6 +22,7 @@ Try {
     [string]$userName = Get-VstsInput -Name userName
     [string]$userPassword = Get-VstsInput -Name userPassword
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout
+    [string]$SQLparameters = Get-vstsinput -Name SQLparameters;
     [string]$removeComments = Get-VstsInput -Name removeComments
 
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
@@ -51,11 +62,11 @@ Try {
             switch ($removeComments) {
                 $true {
                     (Get-Content $sqlScript -Encoding UTF8 | Out-String) -replace '(?s)/\*.*?\*/', " " -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); ReplaceParameters; $reader = $SqlCmd.ExecuteNonQuery() }
                 }
                 $false {
                     (Get-Content $sqlScript -Encoding UTF8 | Out-String) -split '\r?\n\s*go\s*\r\n?' -notmatch '^\s*$' |
-                        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); $reader = $SqlCmd.ExecuteNonQuery() }
+                        ForEach-Object { $SqlCmd.CommandText = $_.Trim(); ReplaceParameters; $reader = $SqlCmd.ExecuteNonQuery() }
                 }
             }
 

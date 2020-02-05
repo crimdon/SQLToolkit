@@ -7,8 +7,8 @@
     "category": "Utility",
     "version": {
         "Major": "2",
-        "Minor": "5",
-        "Patch": "9"
+        "Minor": "6",
+        "Patch": "1"
     },
     "groups": [
         {
@@ -53,6 +53,13 @@
             "defaultValue": true,
             "required": false,
             "helpMarkDown": "If comments are not removed the keyword Go cannot appear in them otherwise the task will fail."
+        },
+        {
+            "name": "SQLparameters",
+            "type": "string",
+            "label": "Replacement Text",
+            "required": false,
+            "helpMarkDown": "Usage existingtext=newtext (Example <TableName>=Customer). Comma delimit for multiples"
         },
         {
             "name": "userName",

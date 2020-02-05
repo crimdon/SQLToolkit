@@ -4,6 +4,16 @@ Param()
 
 Trace-VstsEnteringInvocation $MyInvocation;
 
+function ReplaceParameters {
+    if ([string]::IsNullOrEmpty($SQLparameters)) {
+        return;
+    }
+    $SQLparameters.Split(",") | ForEach-Object {
+        $param,$paramvalue = $_.Split("=").Trim();
+        $SqlCmd.CommandText = $SqlCmd.CommandText.replace($param, $paramvalue);
+    }   
+}
+
 Try {
     Import-VstsLocStrings "$PSScriptRoot\Task.json";
     [string]$pathToScripts = Get-VstsInput -Name pathToScripts;
@@ -14,6 +24,7 @@ Try {
     [string]$userPassword = Get-VstsInput -Name userPassword;
     [string]$queryTimeout = Get-VstsInput -Name queryTimeout;
     [string]$removeComments = Get-VstsInput -Name removeComments;
+    [string]$SQLparameters = Get-vstsinput -Name SQLparameters;
     [string]$continueAfterError = Get-VstsInput -Name continueAfterError;
 
     [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
@@ -49,7 +60,6 @@ Try {
             $SqlCmd = New-Object System.Data.SqlClient.SqlCommand
             $SqlCmd.Connection = $SqlConnection
             $SqlCmd.CommandTimeout = $queryTimeout
-
             if ([string]::IsNullOrEmpty($executionOrder)) {
                 Write-Host "Running all scripts in $pathToScripts";
                 foreach ($sqlScript in Get-ChildItem -path "$pathToScripts" -Filter *.sql | sort-object) {	
@@ -62,6 +72,7 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
+                                    ReplaceParameters;
                                     $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
@@ -80,6 +91,7 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
+                                    ReplaceParameters;
                                     $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
@@ -111,6 +123,7 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
+                                    ReplaceParameters;
                                     $reader = $SqlCmd.ExecuteNonQuery();
                                 }
                                 Catch {
@@ -128,6 +141,7 @@ Try {
                                 ForEach-Object { 
                                 Try {
                                     $SqlCmd.CommandText = $_.Trim(); 
+                                    ReplaceParameters;
                                     $reader = $SqlCmd.ExecuteNonQuery(); 
                                 }
                                 Catch {
