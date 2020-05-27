@@ -46,7 +46,7 @@ Try {
 
 
 Catch {
-    Write-Host "Error running SQL command: $_" -ForegroundColor Red
-    throw $_
+    Write-Host "Error running SQL command: $($Error[0].Exception)" -ForegroundColor Red;
+    throw $Error[0];
 }
 
