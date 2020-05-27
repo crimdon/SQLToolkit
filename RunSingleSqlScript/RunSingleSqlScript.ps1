@@ -79,7 +79,7 @@ Try {
 }
 
 Catch {
-    Write-Host "Error running SQL script: $_" -ForegroundColor Red
-    throw $_
+    Write-Host "Error running SQL script: $_" -ForegroundColor Red;
+    throw $Error[0];
 }
 
